@@ -4,4 +4,4 @@ Convience script to store my Nordnet transactions and performance graphs
 
 ## Overview
 
-![Solution overview](./doc/nordnet-fetch.drawio.svg)
+![Solution overview](./doc/nordnet-fetch.drawio.png)
