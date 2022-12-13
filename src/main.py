@@ -3,6 +3,8 @@ from datetime import date
 from session_handler import SessionHandler
 from nordnet_api import get_transactions
 from nordnet_api import get_performance_graph
+from transactions_repository import TransactionsRepository
+from performance_graph_repository import PerformanceGraphRepository
 
 
 with open("config.json", "r") as configFile:
@@ -19,15 +21,12 @@ with open("config.json", "r") as configFile:
     performance_graph = get_performance_graph(
         session=sessionHandler.get_session())
 
-    today = date.today()
-
     # Store newest transactions page as both CSV and Excel file
-    transactions.to_csv("{}_{}.csv".format(
-        config["transactionsOutputPath"], today), sep=";")
-
-    transactions.to_excel("{}_{}.xlsx".format(
-        config["transactionsOutputPath"], today))
+    transactions_repository = TransactionsRepository(config)
+    transactions_repository.save_transactions(
+        "file", transactions)
 
     # Store Performance Graph
-    with open("{}_{}.json".format(config["performanceGraphOutputPath"], today), "w") as performanceJsonFile:
-        performanceJsonFile.write(json.dumps(performance_graph))
+    performance_graph_repository = PerformanceGraphRepository(config)
+    performance_graph_repository.save_performance_graph(
+        "file", performance_graph)
