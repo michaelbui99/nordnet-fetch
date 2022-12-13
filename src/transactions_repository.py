@@ -6,7 +6,6 @@ from datetime import date
 
 
 class SaveTransactionsStrategy(ABC):
-
     @abstractmethod
     def save(self, transactions: DataFrame):
         pass
@@ -19,8 +18,8 @@ class FileSaveTransactionsStrategy(SaveTransactionsStrategy):
             raise InvalidConfigException("Invalid configuration file")
 
     def save(self, transactions: DataFrame):
-        print(transactions)
         today = date.today()
+        transactions.set_index("Id", inplace=True)
         transactions.to_csv("{}_{}.csv".format(
             self.config["transactionsOutputPath"], today), sep=";")
 
