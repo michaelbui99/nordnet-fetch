@@ -16,7 +16,6 @@ with open("config.json", "r") as configFile:
 
     # Tranactions returned as Pandas DataFrame
     transactions = get_transactions(session=sessionHandler.get_session())
-
     # Performance graph returned as dictionary
     performance_graph = get_performance_graph(
         session=sessionHandler.get_session())

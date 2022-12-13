@@ -30,7 +30,7 @@ def get_transactions(session: Session) -> pd.DataFrame:
         transactions_csv += "{}\n".format(row)
 
     transactions = pd.read_csv(
-        StringIO(transactions_csv), sep=";", header=None)
+        StringIO(transactions_csv), sep=";", header=0)
 
     return transactions
 
