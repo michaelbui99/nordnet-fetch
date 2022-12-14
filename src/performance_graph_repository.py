@@ -1,3 +1,4 @@
+import pandas as pd
 import json
 from abc import ABC, abstractmethod
 from config import InvalidConfigException
@@ -19,6 +20,15 @@ class FileSavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
 
     def save(self, performance_graph: dict):
         today = date.today()
+        df = pd.DataFrame.from_dict(performance_graph)
+        performance_ticks_flattened = pd.json_normalize(
+            df["performance_ticks"][0])
+
+        performance_ticks_flattened.set_index("time", inplace=True)
+        performance_ticks_flattened.to_csv("{}_{}.csv".format(
+            self.config["performanceGraphOutputPath"], today), sep=";")
+        performance_ticks_flattened.to_excel("{}_{}.xlsx".format(
+            self.config["performanceGraphOutputPath"], today))
         with open("{}_{}.json".format(self.config["performanceGraphOutputPath"], today), "w") as performanceJsonFile:
             performanceJsonFile.write(json.dumps(performance_graph))
 

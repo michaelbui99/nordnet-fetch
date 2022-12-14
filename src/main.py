@@ -6,7 +6,6 @@ from nordnet_api import get_performance_graph
 from transactions_repository import TransactionsRepository
 from performance_graph_repository import PerformanceGraphRepository
 
-
 with open("config.json", "r") as configFile:
     config = json.load(configFile)
 
