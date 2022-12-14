@@ -1,9 +1,11 @@
 import pandas as pd
 import json
+from google.cloud import bigquery
 from abc import ABC, abstractmethod
 from config import InvalidConfigException
 from typing import Dict
 from datetime import date
+from etl_sql import insert_latest_performance_tick_date, data_set, project_name
 
 
 class SavePerformanceGraphStrategy(ABC):
@@ -31,6 +33,28 @@ class FileSavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
             self.config["performanceGraphOutputPath"], today))
         with open("{}_{}.json".format(self.config["performanceGraphOutputPath"], today), "w") as performanceJsonFile:
             performanceJsonFile.write(json.dumps(performance_graph))
+
+
+class BigQuerySavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
+    def __init__(self):
+        self.client = bigquery.Client()
+
+    def save(self, performance_graph: dict):
+        df = pd.DataFrame.from_dict(performance_graph)
+        performance_ticks_flattened = pd.json_normalize(
+            df["performance_ticks"][0])
+        performance_ticks_flattened.set_index("time", inplace=True)
+        insert_latest_performance_tick_date(self.client)
+
+        latest_tick_date_job = self.client.query(
+            "SELECT latest_performance_tick_date from `nordnetdata.dwh.etl_metadata` LIMIT 1")
+        latest_tick_date = None
+
+        for row in latest_tick_date_job:
+            latest_tick_date = row["latest_performance_tick_date"]
+
+        performance_ticks_to_add = performance_ticks_flattened.loc(
+            performance_ticks_flattened["date"] > latest_tick_date)
 
 
 class PerformanceGraphRepository:
