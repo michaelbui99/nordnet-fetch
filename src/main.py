@@ -5,7 +5,12 @@ from nordnet_api import get_transactions
 from nordnet_api import get_performance_graph
 from transactions_repository import TransactionsRepository
 from performance_graph_repository import PerformanceGraphRepository
+from dotenv import DotEnv
 
+dotenv = DotEnv()
+dotenv.load()
+
+# TODO: Move configuration to .env / Environment variables
 with open("config.json", "r") as configFile:
     config = json.load(configFile)
 

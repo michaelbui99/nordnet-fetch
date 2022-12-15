@@ -33,10 +33,13 @@ class SessionHandler:
         self._authenticate()
 
     def _authenticate(self) -> None:
-        url = "https://www.nordnet.dk/api/2/authentication/basic/login"
-        payload = {"username": self.username, "password": self.password}
-        res = self.session.post(url=url,  data=payload).json()
-        self.session_key = res["session_key"]
+        try:
+            url = "https://www.nordnet.dk/api/2/authentication/basic/login"
+            payload = {"username": self.username, "password": self.password}
+            res = self.session.post(url=url,  data=payload).json()
+            self.session_key = res["session_key"]
+        except Exception:
+            raise Exception("FAILED TO AUTHENTICATE")
 
     def _prepare_session_for_authentication(self) -> None:
         if (self.session is None):
