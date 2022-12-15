@@ -21,7 +21,7 @@ transactions = get_transactions(session=sessionHandler.get_session())
 performance_graph = get_performance_graph(
     session=sessionHandler.get_session())
 
-if (argv[1] is None or argv[1] == "local" or argv[1] == "file"):
+if (len(argv) == 1 or not argv[1] or argv[1] == "local" or argv[1] == "file"):
     # TODO: Move configuration to .env / Environment variables
     with open("config.json", "r") as configFile:
         config = json.load(configFile)
@@ -35,7 +35,6 @@ if (argv[1] is None or argv[1] == "local" or argv[1] == "file"):
         performance_graph_repository = PerformanceGraphRepository(config)
         performance_graph_repository.save_performance_graph(
             "file", performance_graph)
-
-if (argv[1].lower() == "gcp"):
+elif (argv[1].lower() == "gcp"):
     # TODO: Use GCP strategy in both repositories
     print("GCP")
