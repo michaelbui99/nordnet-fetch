@@ -1,6 +1,7 @@
 from pathlib import Path
 from os import path
 from os import environ
+from os import linesep
 
 
 class NoEnvFileException(Exception):
@@ -24,4 +25,4 @@ class DotEnv:
             lines = env.readlines()
             for line in lines:
                 arg, val = line.split("=")
-                environ[arg] = val
+                environ[arg] = val.strip(linesep)
