@@ -37,4 +37,8 @@ if (len(argv) == 1 or not argv[1] or argv[1] == "local" or argv[1] == "file"):
             "file", performance_graph)
 elif (argv[1].lower() == "gcp"):
     # TODO: Use GCP strategy in both repositories
+    config = {"performanceGraphOutputPath": "", "transactionsOutputPath": ""}
+    performance_graph_repository = PerformanceGraphRepository(config)
+    performance_graph_repository.save_performance_graph(
+        "bigQuery", performance_graph)
     print("GCP")
