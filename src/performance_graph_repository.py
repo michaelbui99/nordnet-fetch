@@ -23,10 +23,14 @@ class FileSavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
     def save(self, performance_graph: dict):
         today = date.today()
         df = pd.DataFrame.from_dict(performance_graph)
+
         performance_ticks_flattened = pd.json_normalize(
             df["performance_ticks"][0])
+        performance_ticks_flattened["date"] = pd.to_datetime(
+            performance_ticks_flattened["date"])
 
         performance_ticks_flattened.set_index("time", inplace=True)
+
         performance_ticks_flattened.to_csv("{}_{}.csv".format(
             self.config["performanceGraphOutputPath"], today), sep=";")
         performance_ticks_flattened.to_excel("{}_{}.xlsx".format(
