@@ -42,13 +42,14 @@ $ .\.venv\Scripts\activate
 $ pip install -r .\requirements.txt
 ```
 
-#### Configure config.json
+#### Configuration
 
-Set the transactionsOutputPath and performanceGraphOutputPath e.g:
+-   Rename .env.sample to .env
+-   Fill out .env
 
-```json
-{
-    "transactionsOutputPath": "C:\\Users\\Bruger\\Documents\\nordnet\\Transaktioner\\transactions",
-    "performanceGraphOutputPath": "C:\\Users\\Bruger\\Documents\\nordnet\\Performance\\performance_graph"
-}
+```
+NORDNET_USERNAME=myUsername123
+NORDNET_PASSWORD=myPassword123
+TRANSACTIONS_OUTPUT_PATH=PATH/TO/STORE/TRANSACTIONS/FILENAME
+PERFORMANCE_GRAPH_OUTPUT_PATH=PATH/TO/STORE/PERFORMANCE_GRAPH_DATA/FILENAME
 ```

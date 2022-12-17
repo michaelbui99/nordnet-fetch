@@ -6,7 +6,7 @@ from config import InvalidConfigException
 from typing import Dict
 from datetime import date
 from datetime import datetime
-from etl_sql import insert_latest_performance_tick_date, insert_performance_graph_data, select_latest_performance_tick_date,
+from etl_sql import insert_latest_performance_tick_date, insert_performance_graph_data, select_latest_performance_tick_date
 
 
 class SavePerformanceGraphStrategy(ABC):
