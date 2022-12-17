@@ -6,10 +6,14 @@ from nordnet_api import get_transactions
 from nordnet_api import get_performance_graph
 from transactions_repository import TransactionsRepository
 from performance_graph_repository import PerformanceGraphRepository
-from dotenv import DotEnv
+from dotenv import DotEnv, NoEnvFileException
 from config import Config
 
-DotEnv().load()
+try:
+    DotEnv().load()
+except NoEnvFileException:
+    print("No env file has been loaded")
+
 config = Config().load()
 
 # Use credentials from environment variables
