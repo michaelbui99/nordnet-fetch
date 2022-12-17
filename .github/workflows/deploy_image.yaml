@@ -7,6 +7,7 @@ on:
         paths:
             - "src/**"
             - "Dockerfile"
+            - ".github/workflows/deploy_image.yaml"
 
 jobs:
     build_and_push:
