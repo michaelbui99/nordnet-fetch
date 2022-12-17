@@ -10,6 +10,7 @@ from dotenv import DotEnv
 from config import Config
 
 DotEnv().load()
+config = Config().load()
 
 # Use credentials from environment variables
 sessionHandler = SessionHandler()
@@ -17,12 +18,14 @@ sessionHandler.login()
 
 # Tranactions returned as Pandas DataFrame
 transactions = get_transactions(session=sessionHandler.get_session())
+
 # Performance graph returned as dictionary
 performance_graph = get_performance_graph(
     session=sessionHandler.get_session())
 
 if (len(argv) == 1 or not argv[1] or argv[1] == "local" or argv[1] == "file"):
-    config = Config().load()
+
+    print("Saving data in local files...")
 
     # Store newest transactions page as both CSV and Excel file
     transactions_repository = TransactionsRepository(config)
@@ -34,8 +37,8 @@ if (len(argv) == 1 or not argv[1] or argv[1] == "local" or argv[1] == "file"):
     performance_graph_repository.save_performance_graph(
         "file", performance_graph)
 elif (argv[1].lower() == "gcp"):
-    # TODO: Use GCP strategy in both repositories
-    config = {"performanceGraphOutputPath": "", "transactionsOutputPath": ""}
+    print("Saving data to GCP BigQuery...")
+
     performance_graph_repository = PerformanceGraphRepository(config)
     performance_graph_repository.save_performance_graph(
         "bigQuery", performance_graph)

@@ -38,6 +38,12 @@ class FileSavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
             self.config["performanceGraphOutputPath"], today))
         with open("{}_{}.json".format(self.config["performanceGraphOutputPath"], today), "w") as performanceJsonFile:
             performanceJsonFile.write(json.dumps(performance_graph))
+        print("Performance graph data have been saved at: ")
+        extensions = ["csv", "xlsx", "json"]
+        for extension in extensions:
+            file_path = "{}_{}.{}".format(
+                self.config["performanceGraphOutputPath"], today, extension)
+            print(file_path)
 
 
 class BigQuerySavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
