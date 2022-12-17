@@ -25,4 +25,5 @@ class DotEnv:
             lines = env.readlines()
             for line in lines:
                 arg, val = line.split("=")
-                environ[arg] = val.strip(linesep)
+                if (arg not in environ):
+                    environ[arg] = val.strip(linesep)
