@@ -6,7 +6,7 @@ from config import InvalidConfigException
 from typing import Dict
 from datetime import date
 from datetime import datetime
-from etl_sql import insert_latest_performance_tick_date, data_set, project_name
+from etl_sql import insert_latest_performance_tick_date, insert_performance_graph_data, select_latest_performance_tick_date,
 
 
 class SavePerformanceGraphStrategy(ABC):
@@ -53,23 +53,12 @@ class BigQuerySavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
         # performance_ticks_flattened.set_index("time", inplace=True)
         insert_latest_performance_tick_date(self.client)
 
-        latest_tick_date_job = self.client.query(
-            "SELECT latest_performance_tick_date from `nordnetdata.dwh.etl_metadata` ORDER BY latest_performance_tick_date DESC LIMIT 1")
-        latest_tick_date = None
-
-        for row in latest_tick_date_job:
-            latest_tick_date = pd.to_datetime(
-                row["latest_performance_tick_date"])
+        latest_tick_date = select_latest_performance_tick_date(self.client)
 
         performance_ticks_to_add: pd.DataFrame = performance_ticks_flattened[(
             performance_ticks_flattened["date"] > datetime.strptime(str(latest_tick_date), "%Y-%m-%d %H:%M:%S"))]
 
-        for index, row in performance_ticks_to_add.iterrows():
-            sql = "INSERT INTO nordnetdata.dwh.performance_graph (time, date, accumulated_returns, returns, accumulated_result_currency, accumulated_result_value, result_currency) VALUES ({}, \"{}\", {}, {}, \"{}\", {}, \"{}\")".format(
-                str(row["time"]), row["date"].date(), row["accumulated_returns"], row["returns"], str(row["accumulated_result.currency"]), row["accumulated_result.value"], str(row["result.currency"]))
-            insert_job = self.client.query(sql)
-            while (not insert_job.done()):
-                print("Inserting...")
+        insert_performance_graph_data(self.client, performance_ticks_to_add)
 
 
 class PerformanceGraphRepository:
