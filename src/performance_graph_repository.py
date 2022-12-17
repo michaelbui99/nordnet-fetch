@@ -7,6 +7,7 @@ from typing import Dict
 from datetime import date
 from datetime import datetime
 from etl_sql import insert_latest_performance_tick_date, insert_performance_graph_data, select_latest_performance_tick_date
+from bigquery_client_factory import BigQueryClientFactory
 
 
 class SavePerformanceGraphStrategy(ABC):
@@ -49,7 +50,7 @@ class FileSavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
 
 class BigQuerySavePerformanceGraphStrategy(SavePerformanceGraphStrategy):
     def __init__(self):
-        self.client = bigquery.Client()
+        self.client = BigQueryClientFactory().create()
 
     def save(self, performance_graph: dict):
         df = pd.DataFrame.from_dict(performance_graph)
