@@ -32,6 +32,10 @@ def get_transactions(session: Session) -> pd.DataFrame:
     transactions = pd.read_csv(
         StringIO(transactions_csv), sep=";", header=0)
 
+    transactions["Bogføringsdag"] = pd.to_datetime(
+        transactions["Bogføringsdag"])
+    transactions["Handelsdag"] = pd.to_datetime(transactions["Handelsdag"])
+    transactions["Valørdag"] = pd.to_datetime(transactions["Valørdag"])
     return transactions
 
 

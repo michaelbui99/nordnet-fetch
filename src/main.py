@@ -24,7 +24,6 @@ performance_graph = get_performance_graph(
     session=sessionHandler.get_session())
 
 if (len(argv) == 1 or not argv[1] or argv[1] == "local" or argv[1] == "file"):
-
     print("Saving data in local files...")
 
     # Store newest transactions page as both CSV and Excel file

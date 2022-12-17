@@ -39,7 +39,7 @@ class SessionHandler:
             res = self.session.post(url=url,  data=payload).json()
             self.session_key = res["session_key"]
         except Exception:
-            raise Exception("FAILED TO AUTHENTICATE")
+            raise AuthenticationFailedException("FAILED TO AUTHENTICATE")
 
     def _prepare_session_for_authentication(self) -> None:
         if (self.session is None):
@@ -61,6 +61,12 @@ class NoCredentialsException(Exception):
 
 
 class NoSessionException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        print(message)
+
+
+class AuthenticationFailedException(Exception):
     def __init__(self, message):
         super().__init__(message)
         print(message)
