@@ -12,7 +12,7 @@ def insert_latest_performance_tick_date(client: bigquery.Client):
 
 
 def insert_performance_graph_data(client: bigquery.Client, performance_graph: pd.DataFrame):
-    for index, row in performance_graph:
+    for index, row in performance_graph.iterrows():
         sql = "INSERT INTO nordnetdata.dwh.performance_graph (time, date, accumulated_returns, returns, accumulated_result_currency, accumulated_result_value, result_currency) VALUES ({}, \"{}\", {}, {}, \"{}\", {}, \"{}\")".format(
             str(row["time"]), row["date"].date(), row["accumulated_returns"], row["returns"], str(row["accumulated_result.currency"]), row["accumulated_result.value"], str(row["result.currency"]))
         insert_job = client.query(sql)
