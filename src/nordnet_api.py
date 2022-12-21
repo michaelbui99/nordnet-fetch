@@ -36,6 +36,7 @@ def get_transactions(session: Session) -> pd.DataFrame:
         transactions["Bogføringsdag"])
     transactions["Handelsdag"] = pd.to_datetime(transactions["Handelsdag"])
     transactions["Valørdag"] = pd.to_datetime(transactions["Valørdag"])
+
     return transactions
 
 

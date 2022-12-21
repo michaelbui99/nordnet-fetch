@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from config import InvalidConfigException
 from typing import Dict
 from datetime import date
+from bigquery_client_factory import BigQueryClientFactory
 
 
 class SaveTransactionsStrategy(ABC):
@@ -25,6 +26,14 @@ class FileSaveTransactionsStrategy(SaveTransactionsStrategy):
 
         transactions.to_excel("{}_{}.xlsx".format(
             self.config["transactionsOutputPath"], today))
+
+
+class BigQuerySaveTransactionsStrategy(SaveTransactionsStrategy):
+    def __init__(self):
+        self.client = BigQueryClientFactory().create()
+
+    def save(self, transactions: DataFrame):
+        # TODO: Clean nulls before inserting
 
 
 class TransactionsRepository:
